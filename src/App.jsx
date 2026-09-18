@@ -812,32 +812,34 @@ function Contact() {
   const update = (field) => (event) => setForm({ ...form, [field]: event.target.value })
 
   const send = async (event) => {
-    event.preventDefault()
-    setStatus('sending')
-    try {
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service_id: 'service_hrikg2k',
-          template_id: 'template_cqtkpzr',
-          user_id: 'u3wb7gio5MneeUsYq',
-          template_params: {
-            from_name: form.name,
-            from_email: form.email,
-            topic: form.topic || 'Portfolio inquiry',
-            message: form.message,
-          },
-        }),
-      })
-      if (!response.ok) throw new Error('Send failed')
-      setStatus('sent')
-      setForm({ name: '', email: '', topic: '', message: '' })
-    } catch (err) {
-      setStatus('error')
-    }
-  }
+  event.preventDefault()
+  setStatus('sending')
 
+  try {
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service_id: 'service_hrikg2k',
+        template_id: 'template_cqtkpzr',
+        user_id: 'u3wb7gio5MneeUsYq',
+        template_params: {
+          name: form.name,
+          email: form.email,
+          title: form.title || 'Portfolio inquiry',
+          message: form.message,
+        },
+      }),
+    })
+
+    if (!response.ok) throw new Error('Send failed')
+
+    setStatus('sent')
+    setForm({ name: '', email: '', topic: '', message: '' })
+  } catch (err) {
+    setStatus('error')
+  }
+}
   return (
     <article className="contact-document">
       <div className="contact-title"><div><h1>Launch Contact Interface</h1><p>Buffer: contact_form.txt (Status: Write-Mode Allowed)</p></div></div>
