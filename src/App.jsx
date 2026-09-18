@@ -292,6 +292,7 @@ function App() {
   const [commandQuery, setCommandQuery] = useState('')
   const [commandIndex, setCommandIndex] = useState(0)
   const [zoomLevel, setZoomLevel] = useState(100)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => { const timer = setTimeout(() => setBooted(true), 1800); return () => clearTimeout(timer) }, [])
 
@@ -300,6 +301,47 @@ function App() {
     const timer = setTimeout(() => setToast(null), 3200)
     return () => clearTimeout(timer)
   }, [toast])
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement))
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
+  }, [])
+
+  const enterFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen()
+      }
+    } catch {
+      setToast('Fullscreen is not available in this browser.')
+    }
+  }
+
+  const exitFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen()
+      }
+    } catch {
+      setToast('Could not exit fullscreen.')
+    }
+  }
+
+  const cheekyComments = [
+    "Alt+F4? We don't do that here 😎",
+    'Nice try. This portfolio is not closing that easily 😏',
+    'Red means mischief, not shutdown. 🔴',
+    'You really thought I would let you close the portfolio? 😂',
+    'The portfolio has decided to stay open. Respect the decision. 😎',
+  ]
+
+  const showCheekyComment = () => {
+    const comment = cheekyComments[Math.floor(Math.random() * cheekyComments.length)]
+    setToast(comment)
+  }
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -497,7 +539,17 @@ function App() {
   return (
     <div className={`app-shell theme-${currentTheme}`}>
       <header className="topbar">
-        <div className="traffic"><span className="traffic-dot red" /><span className="traffic-dot yellow" /><span className="traffic-dot green" /></div>
+        <div className="traffic" aria-label="Window controls">
+          <button className="traffic-dot red" onClick={showCheekyComment} aria-label="Close" title="Close">
+            <span className="traffic-symbol">×</span>
+          </button>
+          <button className="traffic-dot yellow" onClick={exitFullscreen} aria-label="Exit fullscreen" title="Exit fullscreen">
+            <span className="traffic-symbol">−</span>
+          </button>
+          <button className="traffic-dot green" onClick={enterFullscreen} aria-label="Enter fullscreen" title="Fullscreen">
+            <span className="traffic-symbol">+</span>
+          </button>
+        </div>
         <button className="workspace-search" onClick={() => { setCommandPaletteOpen(true); setCommandQuery(''); setCommandIndex(0) }} aria-label="Open command palette"><Search size={15} /><span>yash-khandelwal : portfolio</span><kbd>Ctrl</kbd><kbd>P</kbd></button>
         <div className="branch"><Circle size={8} fill="currentColor" /> main*</div>
         <button className="run-button" aria-label="Run portfolio"><Play size={13} fill="currentColor" /> npm run dev</button>

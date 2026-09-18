@@ -1678,3 +1678,49 @@
     min-height: 30px;
   }
 }
+
+/* macOS-style traffic lights: red = cheeky close comment, yellow = exit fullscreen, green = fullscreen */
+.traffic button.traffic-dot {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.traffic-symbol {
+  opacity: 0;
+  color: rgba(20, 25, 30, .72);
+  font: 700 10px/1 Arial, sans-serif;
+  transition: opacity .12s ease;
+  pointer-events: none;
+}
+
+.traffic:hover .traffic-symbol {
+  opacity: .85;
+}
+
+.traffic button.traffic-dot:hover {
+  filter: brightness(1.08);
+}
+
+.traffic button.traffic-dot:active {
+  transform: scale(.92);
+}
+
+@media (max-width: 620px) {
+  .traffic {
+    display: flex !important;
+    width: auto !important;
+    gap: 7px !important;
+  }
+
+  .traffic button.traffic-dot {
+    width: 10px !important;
+    height: 10px !important;
+    flex: 0 0 10px;
+  }
+}
