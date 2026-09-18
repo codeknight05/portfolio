@@ -806,7 +806,59 @@ function Skills({ openAssistant }) {
     </article>
   )
 }
-function Contact() { const [form, setForm] = useState({ name: '', email: '', topic: '', message: '' }); const [sent, setSent] = useState(false); const update = (field) => (event) => setForm({ ...form, [field]: event.target.value }); const send = (event) => { event.preventDefault(); const subject = form.topic || 'Portfolio inquiry'; const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`; window.location.href = `mailto:yash.ajay05@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`; setSent(true) }; return <article className="contact-document"><div className="contact-title"><div><h1>Launch Contact Interface</h1><p>Buffer: contact_form.txt (Status: Write-Mode Allowed)</p></div></div><section className="contact-form-card"><p className="contact-comment">// Submit a direct message into Yash's console channel</p><form onSubmit={send}><label>NAME <span>(string)</span><input value={form.name} onChange={update('name')} placeholder="E.g. Elon Musk" required /></label><label>EMAIL_ADDRESS <span>(string)</span><input type="email" value={form.email} onChange={update('email')} placeholder="email@domain.com" required /></label><label>TOPIC <span>(string)</span><input value={form.topic} onChange={update('topic')} placeholder="Inquiry / Hires / Collabs" /></label><label>MESSAGE_BODY <span>(string[])</span><textarea value={form.message} onChange={update('message')} placeholder="Write details of your proposal here..." required /></label><button className="send-message" type="submit"><Send size={16} /> SEND_MESSAGE()</button>{sent && <p className="sent-status">Message prepared in your email client.</p>}</form></section><section className="direct-contacts"><h2>Direct Contact channels:</h2><div><a href="mailto:yash.ajay05@gmail.com"><Mail size={14} /> <span>Email:<b>yash.ajay05@gmail.com</b></span></a><a href="https://github.com/codeknight05" target="_blank" rel="noreferrer"><Code2 size={14} /> <span>GitHub:<b>github.com/codeknight05</b></span></a><a href="https://linkedin.com/in/yashkhandelwal005/" target="_blank" rel="noreferrer"><LinkedinIcon /> <span>LinkedIn:<b>linkedin.com/in/yashkhandelwal005</b></span></a><a href="tel:+919730588865"><MessageSquare size={14} /> <span>Phone:<b>+91 97305 88865</b></span></a></div></section></article> }
+function Contact() {
+  const [form, setForm] = useState({ name: '', email: '', topic: '', message: '' })
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  const update = (field) => (event) => setForm({ ...form, [field]: event.target.value })
+
+  const send = async (event) => {
+    event.preventDefault()
+    setStatus('sending')
+    try {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: 'service_hrikg2k',
+          template_id: 'template_cqtkpzr',
+          user_id: 'u3wb7gio5MneeUsYq',
+          template_params: {
+            from_name: form.name,
+            from_email: form.email,
+            topic: form.topic || 'Portfolio inquiry',
+            message: form.message,
+          },
+        }),
+      })
+      if (!response.ok) throw new Error('Send failed')
+      setStatus('sent')
+      setForm({ name: '', email: '', topic: '', message: '' })
+    } catch (err) {
+      setStatus('error')
+    }
+  }
+
+  return (
+    <article className="contact-document">
+      <div className="contact-title"><div><h1>Launch Contact Interface</h1><p>Buffer: contact_form.txt (Status: Write-Mode Allowed)</p></div></div>
+      <section className="contact-form-card">
+        <p className="contact-comment">// Submit a direct message into Yash's console channel</p>
+        <form onSubmit={send}>
+          <label>NAME <span>(string)</span><input value={form.name} onChange={update('name')} placeholder="E.g. Elon Musk" required /></label>
+          <label>EMAIL_ADDRESS <span>(string)</span><input type="email" value={form.email} onChange={update('email')} placeholder="email@domain.com" required /></label>
+          <label>TOPIC <span>(string)</span><input value={form.topic} onChange={update('topic')} placeholder="Inquiry / Hires / Collabs" /></label>
+          <label>MESSAGE_BODY <span>(string[])</span><textarea value={form.message} onChange={update('message')} placeholder="Write details of your proposal here..." required /></label>
+          <button className="send-message" type="submit" disabled={status === 'sending'}>
+            <Send size={16} /> {status === 'sending' ? 'SENDING...' : 'SEND_MESSAGE()'}
+          </button>
+          {status === 'sent' && <p className="sent-status">Message sent directly to Yash's inbox.</p>}
+          {status === 'error' && <p className="sent-status sent-status-error">Something went wrong — please try again or email directly.</p>}
+        </form>
+      </section>
+      <section className="direct-contacts"><h2>Direct Contact channels:</h2><div><a href="mailto:yash.ajay05@gmail.com"><Mail size={14} /> <span>Email:<b>yash.ajay05@gmail.com</b></span></a><a href="https://github.com/codeknight05" target="_blank" rel="noreferrer"><Code2 size={14} /> <span>GitHub:<b>github.com/codeknight05</b></span></a><a href="https://linkedin.com/in/yashkhandelwal005/" target="_blank" rel="noreferrer"><LinkedinIcon /> <span>LinkedIn:<b>linkedin.com/in/yashkhandelwal005</b></span></a><a href="tel:+919730588865"><MessageSquare size={14} /> <span>Phone:<b>+91 97305 88865</b></span></a></div></section>
+    </article>
+  )
+}
 function Resume() {
   const experiences = [
     {
