@@ -804,3 +804,702 @@
   background: var(--t-overlay) !important;
 }
 
+
+
+/* =========================================================
+   MOBILE RESPONSIVE FIX — appended override
+   ========================================================= */
+@media (max-width: 620px) {
+  html, body, #root {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .app-shell {
+    width: 100%;
+    min-width: 0;
+    height: 100dvh;
+  }
+
+  .activitybar,
+  .explorer,
+  .skills-sidebar {
+    display: none !important;
+  }
+
+  .topbar {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .traffic {
+    display: none;
+  }
+
+  .workspace-search {
+    width: 100%;
+    max-width: none;
+    height: 30px;
+    margin: 0;
+  }
+
+  .workspace-search kbd,
+  .branch,
+  .run-button {
+    display: none !important;
+  }
+
+  .menubar {
+    height: 36px;
+    min-height: 36px;
+    padding: 0 10px;
+  }
+
+  .menubar .menu-group {
+    display: none;
+  }
+
+  .menubar .ai-button {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .body-layout {
+    position: relative;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .main-pane {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .tabbar {
+    position: relative;
+    height: 40px;
+    min-height: 40px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-shrink: 0;
+    scrollbar-width: none;
+    padding-right: 42px;
+    box-sizing: border-box;
+  }
+
+  /* Keep the mobile sidebar button visible even when many tabs are open. */
+  .mobile-menu {
+    display: flex !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42px;
+    height: 40px;
+    margin: 0 !important;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    background: #11161c;
+    border-left: 1px solid #262e38;
+    color: #aab6c3;
+  }
+
+  .mobile-menu:active {
+    background: #1b2530;
+  }
+
+  .tabbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Mobile sidebar drawer. The activity rail stays narrow and the selected
+     panel opens beside it above the page content. */
+  .activitybar.mobile-open {
+    display: flex !important;
+    position: absolute !important;
+    top: 80px !important;
+    bottom: 24px !important;
+    left: 0 !important;
+    width: 56px !important;
+    z-index: 50 !important;
+    background: #11161d !important;
+  }
+
+  .mobile-open + .explorer,
+  .mobile-open + .skills-sidebar,
+  .mobile-open + .search-panel {
+    display: flex !important;
+    position: absolute !important;
+    top: 80px !important;
+    bottom: 24px !important;
+    left: 56px !important;
+    width: calc(100% - 56px) !important;
+    max-width: calc(100% - 56px) !important;
+    z-index: 49 !important;
+    box-shadow: 10px 0 30px rgba(0,0,0,.35);
+  }
+
+
+  .tab {
+    height: 40px;
+    flex: 0 0 auto;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .content-scroll {
+    min-height: 0;
+    flex: 1;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .home-view,
+  .document,
+  .home-dashboard,
+  .skills-document,
+  .about-document,
+  .experience-document,
+  .readme-document,
+  .resume-document,
+  .certifications-document,
+  .contact-document,
+  .project-detail-doc {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .home-dashboard {
+    display: block;
+    padding: 28px 17px 70px;
+  }
+
+  .home-name span,
+  .home-name strong {
+    font-size: clamp(42px, 13vw, 56px);
+    line-height: .95;
+    letter-spacing: -2px;
+    overflow-wrap: anywhere;
+  }
+
+  .home-lede {
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+  }
+
+  .home-copy {
+    font-size: 12px !important;
+    line-height: 1.7 !important;
+  }
+
+  .home-roles {
+    gap: 7px;
+  }
+
+  .home-roles span {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .home-actions a,
+  .home-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-stats-card {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-col {
+    min-width: 0;
+    padding: 18px 8px;
+  }
+
+  .stat-col strong {
+    font-size: 22px;
+  }
+
+  .stat-col span {
+    font-size: 9px;
+  }
+
+  .quick-grid,
+  .project-grid,
+  .skills-module-grid,
+  .cert-cards-grid,
+  .info-row {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .quick-card,
+  .project-card,
+  .skills-module,
+  .cert-grid-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .document,
+  .skills-document,
+  .about-document,
+  .readme-document,
+  .resume-document,
+  .certifications-document,
+  .contact-document,
+  .project-detail-doc {
+    padding: 25px 16px 60px;
+  }
+
+  .document h1,
+  .skills-title h1,
+  .about-title h1,
+  .experience-title h1,
+  .cert-doc-header h1 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  .about-profile,
+  .readme-profile {
+    display: block;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .about-avatar,
+  .readme-avatar {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 18px;
+  }
+
+  .timeline {
+    margin-left: 5px;
+    padding-left: 22px;
+  }
+
+  .job-marker {
+    left: -28px;
+  }
+
+  .job h2 {
+    font-size: 18px;
+  }
+
+  .job li {
+    font-size: 13px;
+  }
+
+  .skill-row {
+    grid-template-columns: 22px minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .skill-row p {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .contact-form-card,
+  .direct-contacts {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .direct-contacts > div {
+    grid-template-columns: 1fr;
+  }
+
+  .proj-header-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .proj-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proj-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .proj-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .proj-card {
+    width: 100%;
+    min-width: 0;
+    padding: 18px 16px;
+  }
+
+  .proj-ai-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Mobile terminal: collapsed to a compact bar so it does not
+     consume the phone viewport. */
+  .terminal {
+    height: 36px !important;
+    min-height: 36px !important;
+    border-top: 1px solid #2d3744;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .terminal-head,
+  .terminal-body {
+    display: none !important;
+  }
+
+  .terminal-peek {
+    height: 36px !important;
+    min-height: 36px !important;
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .terminal-head small {
+    display: none;
+  }
+
+  .statusbar {
+    height: 24px;
+    min-height: 24px;
+    padding: 0 8px;
+    gap: 8px;
+    font-size: 9px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .statusbar span:nth-child(4),
+  .statusbar span:nth-child(5),
+  .status-theme {
+    display: none !important;
+  }
+
+  .status-buffer {
+    margin-left: auto;
+  }
+
+  .assistant-panel {
+    left: 8px;
+    right: 8px;
+    bottom: 32px;
+    width: auto;
+    height: min(430px, calc(100dvh - 90px));
+  }
+
+  .settings-panel {
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .leetcode-card-link {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Override the earlier 760px mobile heatmap rule. */
+  .leetcode-heatmap {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 90px;
+    height: auto;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .skills-verification {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .skills-verification > button {
+    padding-top: 2px;
+  }
+}
+
+/* Final mobile navigation fix: keep File/Edit/View/etc. visible on phones. */
+@media (max-width: 620px) {
+  .menubar {
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 3px !important;
+    gap: 0 !important;
+    display: flex !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+    white-space: nowrap;
+    position: relative;
+    z-index: 100;
+  }
+
+  .menubar .menu-group {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    height: 100%;
+  }
+
+  .menubar .menu-trigger {
+    display: flex !important;
+    align-items: center;
+    height: 100%;
+    padding: 0 7px !important;
+    font-size: 11px !important;
+    white-space: nowrap;
+  }
+
+  .menubar .ai-button {
+    display: none !important;
+  }
+
+  .menubar .menu-dropdown {
+    top: 100% !important;
+    z-index: 200 !important;
+  }
+}
+
+/* Fix mobile menu dropdowns */
+@media (max-width: 620px) {
+  .menubar .menu-dropdown {
+    display: block !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+    min-width: 180px;
+  }
+
+  .menubar .menu-dropdown button {
+    display: flex !important;
+  }
+}
+
+/* Mobile sidebar layering: keep the terminal and Franz Hermann assistant accessible. */
+@media (max-width: 620px) {
+  .activitybar.mobile-open {
+    top: 80px !important;
+    bottom: 60px !important; /* 36px terminal + 24px status bar */
+    z-index: 50 !important;
+  }
+
+  .mobile-open + .explorer,
+  .mobile-open + .skills-sidebar,
+  .mobile-open + .search-panel {
+    top: 80px !important;
+    bottom: 60px !important;
+    z-index: 49 !important;
+  }
+
+  .assistant-panel {
+    z-index: 60 !important;
+  }
+
+  .terminal {
+    position: relative;
+    z-index: 55 !important;
+  }
+}
+
+/* Final mobile activity-bar spacing fix */
+@media (max-width: 620px) {
+  .activitybar.mobile-open {
+    width: 64px !important;
+    padding: 12px 0 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box;
+  }
+
+  .activitybar.mobile-open .avatar-button {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    margin: 0 0 18px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .activitybar.mobile-open .activity-icons {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+  }
+
+  .activitybar.mobile-open .activity-icons button {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .activitybar.mobile-open .activity-bottom {
+    margin-top: auto !important;
+    gap: 8px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    align-items: center !important;
+  }
+
+  .activitybar.mobile-open .activity-bottom a,
+  .activitybar.mobile-open .activity-bottom button {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Mobile activity rail: keep every icon evenly spaced and prevent flex gaps from stretching. */
+@media (max-width: 620px) {
+  .activitybar.mobile-open {
+    width: 64px !important;
+    padding: 12px 0 8px !important;
+    overflow: hidden !important;
+  }
+
+  .activitybar.mobile-open .avatar-button {
+    margin: 0 0 14px !important;
+  }
+
+  .activitybar.mobile-open .activity-icons {
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+
+  .activitybar.mobile-open .activity-icons button {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+  }
+
+  .activitybar.mobile-open .activity-bottom {
+    margin-top: auto !important;
+    gap: 10px !important;
+    padding: 0 !important;
+  }
+
+  .activitybar.mobile-open .activity-bottom a,
+  .activitybar.mobile-open .activity-bottom button {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+  }
+}
+
+/* Mobile terminal drawer: keep it visible while the page/content is scrolled. */
+@media (max-width: 620px) {
+  .main-pane {
+    position: relative;
+  }
+
+  .content-scroll {
+    padding-bottom: 36px !important;
+  }
+
+  .terminal,
+  .terminal-peek {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 24px !important; /* stay above the status bar */
+    width: 100vw !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    z-index: 80 !important;
+    margin: 0 !important;
+  }
+
+  .terminal-peek {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .terminal {
+    overflow: hidden !important;
+  }
+}
+
+/* Mobile terminal drawer: show the full terminal when it is opened. */
+@media (max-width: 620px) {
+  .terminal {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 24px !important;
+    width: 100vw !important;
+    height: 190px !important;
+    min-height: 190px !important;
+    max-height: 190px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    z-index: 90 !important;
+  }
+
+  .terminal-head {
+    display: flex !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .terminal-body {
+    display: block !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 10px 12px !important;
+  }
+
+  .content-scroll {
+    padding-bottom: 190px !important;
+  }
+}

@@ -393,9 +393,13 @@ function App() {
     event.preventDefault()
     const command = terminalInput.trim().toLowerCase()
     if (!command) return
-    const responses = { help: 'commands: about · skills · experience · projects · contact · resume · clear', about: 'Opening about.md...', skills: 'Opening skills.json...', experience: 'Opening experience.ts...', projects: '3 projects indexed in /projects', contact: 'Opening contact.css...', resume: 'Opening Yash_Khandelwal_Resume.pdf...' }
+    const responses = { help: 'commands: about · skills · experience · projects · contact · resume · clear', about: 'Opening about.html...', skills: 'Opening skills.json...', experience: 'Opening experience.ts...', projects: '3 projects indexed in /projects', contact: 'Opening contact.css...', resume: 'Opening Yash_Khandelwal_Resume.pdf...' }
     if (command === 'clear') setTerminalLines([])
-    else { setTerminalLines((lines) => [...lines, `yash@portfolio:~$ ${terminalInput}`, responses[command] || `command not found: ${command}`]); if (['about', 'skills', 'experience', 'contact', 'resume'].includes(command)) setActive(command); if (command === 'projects') setActive('home') }
+    else {
+      setTerminalLines((lines) => [...lines, `yash@portfolio:~$ ${terminalInput}`, responses[command] || `command not found: ${command}`])
+      if (['about', 'skills', 'experience', 'contact', 'resume'].includes(command)) selectView(command)
+      if (command === 'projects') selectView('home')
+    }
     setTerminalInput('')
   }
 
