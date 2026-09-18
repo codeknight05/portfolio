@@ -288,6 +288,10 @@ function App() {
   const [fileSearch, setFileSearch] = useState('')
   const [openMenu, setOpenMenu] = useState(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
+  const [commandQuery, setCommandQuery] = useState('')
+  const [commandIndex, setCommandIndex] = useState(0)
+  const [zoomLevel, setZoomLevel] = useState(100)
 
   useEffect(() => { const timer = setTimeout(() => setBooted(true), 1800); return () => clearTimeout(timer) }, [])
 
@@ -296,6 +300,51 @@ function App() {
     const timer = setTimeout(() => setToast(null), 3200)
     return () => clearTimeout(timer)
   }, [toast])
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'p') {
+        event.preventDefault()
+        setCommandPaletteOpen(true)
+        setCommandQuery('')
+        setCommandIndex(0)
+        return
+      }
+      if (!commandPaletteOpen) return
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        setCommandPaletteOpen(false)
+        return
+      }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        setCommandIndex((index) => index + 1)
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        setCommandIndex((index) => Math.max(0, index - 1))
+      }
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        window.dispatchEvent(new CustomEvent('portfolio-command-execute'))
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [commandPaletteOpen])
+
+  const changeZoom = (delta) => {
+    setZoomLevel((current) => {
+      const next = Math.min(125, Math.max(80, current + delta))
+      document.documentElement.style.zoom = `${next}%`
+      return next
+    })
+  }
+
+  const resetZoom = () => {
+    document.documentElement.style.zoom = '100%'
+    setZoomLevel(100)
+  }
 
   const selectTheme = (themeId) => {
     setCurrentTheme(themeId)
@@ -375,6 +424,46 @@ function App() {
     { label: 'Terminal', items: [{ label: terminalOpen ? 'Close Terminal' : 'Open Terminal', hint: 'Toggle', action: () => setTerminalOpen(!terminalOpen) }, { label: 'Clear Terminal', hint: 'clear', action: () => setTerminalLines([]) }] },
     { label: 'Help', items: [{ label: 'Portfolio Assistant', hint: 'AI', action: () => setAssistantOpen(true) }, { label: 'Contact Yash', hint: 'CSS', action: () => selectView('contact') }] },
   ]
+
+  const commandActions = [
+    ...files.map((file) => ({
+      label: file.name,
+      hint: 'file tab',
+      icon: file.icon,
+      color: file.color,
+      action: () => selectView(file.view),
+    })),
+    { label: '> Toggle Terminal', hint: 'system action', icon: Zap, color: '#f4c96b', action: () => setTerminalOpen((open) => !open) },
+    { label: '> Toggle Sidebar', hint: 'system action', icon: Zap, color: '#f4c96b', action: () => setSidebar((open) => !open) },
+    { label: '> Zoom In', hint: 'system action', icon: Zap, color: '#f4c96b', action: () => changeZoom(10) },
+    { label: '> Zoom Out', hint: 'system action', icon: Zap, color: '#f4c96b', action: () => changeZoom(-10) },
+    { label: '> Reset Zoom', hint: 'system action', icon: Zap, color: '#f4c96b', action: resetZoom },
+    { label: '> Open Franz Hermann AI Assist', hint: 'system action', icon: Zap, color: '#f4c96b', action: () => setAssistantOpen(true) },
+    { label: '> System Diagnostics', hint: 'system action', icon: Zap, color: '#f4c96b', action: () => setToast('System diagnostics: portfolio workspace is online.') },
+  ]
+
+  const filteredCommandActions = commandActions.filter((item) =>
+    item.label.toLowerCase().includes(commandQuery.trim().toLowerCase())
+  )
+
+  const executeCommandAction = (item) => {
+    if (!item) return
+    item.action()
+    setCommandPaletteOpen(false)
+    setCommandQuery('')
+    setCommandIndex(0)
+  }
+
+  useEffect(() => {
+    const execute = () => executeCommandAction(filteredCommandActions[commandIndex])
+    window.addEventListener('portfolio-command-execute', execute)
+    return () => window.removeEventListener('portfolio-command-execute', execute)
+  }, [commandIndex, filteredCommandActions])
+
+  useEffect(() => {
+    if (commandIndex >= filteredCommandActions.length) setCommandIndex(Math.max(0, filteredCommandActions.length - 1))
+  }, [commandIndex, filteredCommandActions.length])
+
   const askAssistant = (prompt) => {
     const query = prompt.trim()
     if (!query) return
@@ -409,7 +498,7 @@ function App() {
     <div className={`app-shell theme-${currentTheme}`}>
       <header className="topbar">
         <div className="traffic"><span className="traffic-dot red" /><span className="traffic-dot yellow" /><span className="traffic-dot green" /></div>
-        <div className="workspace-search"><Search size={15} /><span>yash-khandelwal : portfolio</span><kbd>Ctrl</kbd><kbd>P</kbd></div>
+        <button className="workspace-search" onClick={() => { setCommandPaletteOpen(true); setCommandQuery(''); setCommandIndex(0) }} aria-label="Open command palette"><Search size={15} /><span>yash-khandelwal : portfolio</span><kbd>Ctrl</kbd><kbd>P</kbd></button>
         <div className="branch"><Circle size={8} fill="currentColor" /> main*</div>
         <button className="run-button" aria-label="Run portfolio"><Play size={13} fill="currentColor" /> npm run dev</button>
       </header>
@@ -446,6 +535,16 @@ function App() {
           {!terminalOpen && <button className="terminal-peek" onClick={() => setTerminalOpen(true)}><TerminalIcon size={15} /> Terminal Drawer</button>}
         </main>
       </div>
+      {commandPaletteOpen && (
+        <CommandPalette
+          query={commandQuery}
+          setQuery={(value) => { setCommandQuery(value); setCommandIndex(0) }}
+          items={filteredCommandActions}
+          selectedIndex={commandIndex}
+          onSelect={executeCommandAction}
+          close={() => setCommandPaletteOpen(false)}
+        />
+      )}
       {assistantOpen && <Assistant messages={assistantMessages} input={assistantInput} setInput={setAssistantInput} ask={askAssistant} close={() => setAssistantOpen(false)} />}
       {settingsOpen && (
         <SettingsPanel
@@ -1162,6 +1261,40 @@ function ProjectView({ project, close, openAssistant }) {
 function DocHeader({ icon: Icon, title, subtitle }) { return <div className="doc-header"><Icon size={18} /><div><b>{title}</b><span>{subtitle}</span></div><div className="doc-dots">•••</div></div> }
 function Info({ icon: Icon, label, value }) { return <div className="info"><Icon size={17} /><small>{label}</small><b>{value}</b></div> }
 function Terminal({ lines, value, setValue, runCommand, close }) { return <section className="terminal"><div className="terminal-head"><span><TerminalIcon size={15} /> Terminal Drawer <small>(bash · port 3000)</small></span><div><button onClick={close}><X size={15} /></button></div></div><div className="terminal-body">{lines.map((line, i) => <div key={`${line}-${i}`} className={i % 2 ? 'terminal-dim' : ''}>{line}</div>)}<form onSubmit={runCommand}><span>yash@portfolio:~$</span><input value={value} onChange={(event) => setValue(event.target.value)} autoComplete="off" autoFocus /></form></div></section> }
+function CommandPalette({ query, setQuery, items, selectedIndex, onSelect, close }) {
+  return (
+    <div className="command-palette-overlay" onMouseDown={close}>
+      <div className="command-palette" onMouseDown={(event) => event.stopPropagation()}>
+        <div className="command-palette-search">
+          <span>▶</span>
+          <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search files and available commands (e.g., projects, experience, reset)" />
+        </div>
+        <div className="command-palette-list">
+          {items.length ? items.map((item, index) => {
+            const Icon = item.icon || FileCode2
+            return (
+              <button
+                className={`command-palette-item ${index === selectedIndex ? 'active' : ''}`}
+                key={`${item.hint}-${item.label}`}
+                onMouseEnter={() => {}}
+                onClick={() => onSelect(item)}
+              >
+                <Icon size={15} color={item.color || '#c5ced9'} />
+                <strong>{item.label}</strong>
+                <span>{item.hint}</span>
+              </button>
+            )
+          }) : <div className="command-palette-empty">No matching commands</div>}
+        </div>
+        <div className="command-palette-footer">
+          <span>Use <kbd>↑↓</kbd> keys to navigate, <kbd>Enter</kbd> to execute</span>
+          <span><kbd>ESC</kbd> to close</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Assistant({ messages, input, setInput, ask, close }) { return <aside className="assistant-panel"><div className="assistant-head"><span><Sparkles size={16} /> Franz Hermann <small>portfolio context</small></span><button onClick={close}><X size={16} /></button></div><div className="assistant-messages">{messages.map((message, index) => <div className={`assistant-message ${message.role}`} key={`${message.role}-${index}`}>{message.text}</div>)}</div><div className="assistant-suggestions"><button onClick={() => ask('What skills does Yash have?')}>Skills</button><button onClick={() => ask('Tell me about the projects')}>Projects</button><button onClick={() => ask('How can I contact Yash?')}>Contact</button></div><form className="assistant-form" onSubmit={(event) => { event.preventDefault(); ask(input) }}><input value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask Franz Hermann about this portfolio..." /><button aria-label="Send question"><Send size={15} /></button></form></aside> }
 function LinkedinIcon() { return <span className="linkedin-icon">in</span> }
 function GithubIcon() {
