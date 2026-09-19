@@ -1724,3 +1724,43 @@
     flex: 0 0 10px;
   }
 }
+
+/* Hide all visible scrollbars while keeping scrolling fully functional. */
+html,
+body,
+#root,
+.app-shell,
+.body-layout,
+.main-pane,
+.content-scroll,
+.tree,
+.skills-sidebar-scroll,
+.terminal-body,
+.assistant-messages,
+.command-palette-list,
+.tabbar,
+.explorer,
+.skills-sidebar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+.app-shell::-webkit-scrollbar,
+.body-layout::-webkit-scrollbar,
+.main-pane::-webkit-scrollbar,
+.content-scroll::-webkit-scrollbar,
+.tree::-webkit-scrollbar,
+.skills-sidebar-scroll::-webkit-scrollbar,
+.terminal-body::-webkit-scrollbar,
+.assistant-messages::-webkit-scrollbar,
+.command-palette-list::-webkit-scrollbar,
+.tabbar::-webkit-scrollbar,
+.explorer::-webkit-scrollbar,
+.skills-sidebar::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}

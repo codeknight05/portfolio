@@ -763,7 +763,7 @@ function DynamicSkillsIndexPanel({ selectView, compact = false }) {
 
 function Content({ active, hasOpenTabs, selectView, openProject, project, openAssistant, selectedCert, setSelectedCert }) {
   if (!hasOpenTabs) return <WorkspaceWelcome selectView={selectView} openAssistant={openAssistant} />
-  if (project) return <ProjectView project={project} close={() => openProject(null)} />
+  if (project) return <ProjectView project={project} close={() => openProject(null)} openAssistant={openAssistant} />
   if (active === 'about') return <About />
   if (active === 'readme') return <Readme />
   if (active === 'experience') return <Experience />
