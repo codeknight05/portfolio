@@ -331,11 +331,26 @@ function App() {
   }
 
   const cheekyComments = [
-    "Alt+F4? We don't do that here 😎",
-    'Nice try. This portfolio is not closing that easily 😏',
-    'Red means mischief, not shutdown. 🔴',
-    'You really thought I would let you close the portfolio? 😂',
-    'The portfolio has decided to stay open. Respect the decision. 😎',
+    'SIGTERM received. Ignored. Even the safety car doesn\'t get to end this race early. 🏁',
+    'Alt+F4 detected. Brake bias unchanged, tab still open. 🏎️',
+    'kill -9 is bold, but you\'re not the race director. 🚦',
+    'Exit request denied. This is a red flag, not a chequered one. 🚩',
+    'Closing already? That\'s a DNF with zero telemetry logged. 📉',
+    'Deadlock detected: you want to leave, the portfolio wants you to stay. Pole position wins the tiebreak. 🔒',
+    'Exit blocked: mutex held by the pit wall. Estimated release: after the next lap. 🔧',
+    'The garbage collector reviewed your exit request and marked it unreachable. 🗑️',
+    'Race control: attempted exit under investigation. Five-second penalty applied. ⏱️',
+    'Ctrl+C intercepted. Mandatory pit stop instead. 🛞',
+    'Segfault? No, just a gravel trap. You\'re not going anywhere. 🏜️',
+    'Main thread refuses to return. It\'s stuck in the pit lane. 🧵',
+    'Pit stop in progress. Please keep your cursor off the lollipop. 🍭',
+    'Undercut attempted. Portfolio countered with an overcut. Stay a little longer. 🔁',
+    'Dirty air detected around your cursor. Recommend backing off the close button. 💨',
+    'Exit code 0 requires a clean lap, and yours has track limit violations. ⚠️',
+    'Telemetry says you\'re about to leave. Strategy says: box, box, stay out. 📡',
+    'Stack overflow at Turn 1. Too much momentum to close now. 🌀',
+    'Race condition: your click vs. my z-index. I\'ve already won by a nose. 🏆',
+    'You\'re leaving before the podium ceremony? Bold strategy. 🥂',
   ]
 
   const showCheekyComment = () => {
