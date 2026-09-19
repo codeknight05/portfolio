@@ -298,7 +298,7 @@ function App() {
 
   useEffect(() => {
     if (!toast) return
-    const timer = setTimeout(() => setToast(null), 3200)
+    const timer = setTimeout(() => setToast(null), 3700)
     return () => clearTimeout(timer)
   }, [toast])
 
@@ -626,7 +626,13 @@ function App() {
         />
       )}
       {toast && (
-        <div className="theme-toast">
+        <div
+          className="theme-toast"
+          style={{
+            position: 'fixed',
+            zIndex: 99999,
+          }}
+        >
           <Zap size={13} color="#f4c96b" />
           <span>{toast}</span>
           <button onClick={() => setToast(null)} aria-label="Close notification"><X size={12} /></button>
