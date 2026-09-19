@@ -1764,3 +1764,8 @@ body::-webkit-scrollbar,
   height: 0 !important;
   display: none !important;
 }
+
+/* Fix about.html EDUCATION label: prevent the global traffic-light .green class from adding a green background. */
+.html-section-label.green {
+  background: transparent !important;
+}
