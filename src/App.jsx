@@ -823,7 +823,7 @@ function RotatingProfession({ className }) {
   return <div className={className}><span>{displayText || '\u00A0'}</span><i aria-hidden="true" /></div>
 }
 
-function Home({ selectView }) {
+function Home({ selectView, openProject }) {
   return (
     <section className="home-view home-dashboard">
       <div className="home-intro">
@@ -846,7 +846,7 @@ function Home({ selectView }) {
         </p>
 
         <div className="home-actions">
-          <button className="btn-primary-blue" onClick={() => selectView?.('home')}>
+          <button className="btn-primary-blue" onClick={() => openProject?.(projects[0])}>
             <Folder size={14} /> Projects
           </button>
           <button className="btn-outline" onClick={() => selectView?.('about')}>
